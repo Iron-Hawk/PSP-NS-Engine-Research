@@ -1,7 +1,7 @@
 THUG2 PSP Bone Bytes Doc
 
-Extra Data From Bone Docs
-Made By LetMyNutzGo
+Bone Name & Its Corresponding Bone # 
+From Bone Docs Made By LetMyNutzGo
 
 Bone #  Bone Name            Bone Bytes
 0       Root                 00 00

@@ -1,0 +1,22 @@
+This isn't specific to PSP, but the THAW engine tony hawk games, but I haven't seen any other documentation about it so i'm putting it in here.
+
+Header/Gap Ammount
+
+The gap files use pretty common byte to value things for everything, the first 8 bytes seem to be specific to each level, but not changing them
+when making new files has seemed to have no impact on them function fine for the new level, and gap tracking and all that so you can ignore them.
+After those 8 bytes, there is a two bytes which are the number of gaps in the gap file, so if there is like 30 gaps in the map then the byte should
+be 1E 00. 
+
+Gap Scores, String Length, and String
+
+After those two bytes, the bytes for each gap are introduced, now they have no padding, so they are basically back to back, so i'll run through
+each part of the gap themselves, the first byte is the score for the gap, there are 5 bytes inbetween the score, and string, the last one 
+of these 5 are for the string length but then it might be 4 bytes for the score, though I have not ran into any gaps with a score 3 or 4 bytes big, but after 
+the score bytes, there is a byte which is the length of the gap name, so if the gap name is 8 characters long, then the string byte is 08, and then after the string
+byte, is the string for the gap name, and then after that, the next gap starts, and repeat till you get to the end.
+
+For example, these bytes are for the Post Hop gap in Philly (from THUG2) which I put into THPM 
+32 00 00 00 08 50 6F 73 74 20 48 6F 70
+The first byte is the score which is 50
+Then the 08 is the length of the gap name, which is 8 characters long (including the space as a char)
+Then the rest are the text or string for the gap name.

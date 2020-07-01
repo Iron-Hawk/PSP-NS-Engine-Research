@@ -1,0 +1,55 @@
+THUG 2 Female Ped PSP Bone Bytes Doc
+
+Extra Data From Bone Docs
+Made By LetMyNutzGo
+
+Bone #  Bone Name            Bone Bytes
+0       Root                 00 00
+1       Waist                40 00
+2       Lower Spine          80 00
+3       Middle Spine         C0 00
+4       Upper Spine          00 01
+5       Left Collar          40 01
+6       Left Upper Arm       80 01
+7       Left Fore Arm        C0 01
+8       Left Hand            00 02
+9       Left Pinky Bottom    40 02
+10      Left Pinky Top       80 02
+11      Left Index Bottom    C0 02
+12      Left Index Top       00 03
+13      Left Thumb           40 03
+14      Left Wrist           80 03
+15      ???                  C0 03
+16      ???                  00 04
+17      Right Collar         40 04
+18      Right Upper Arm      80 04
+19      Right Fore Arm       C0 04
+20      Right Hand           00 05
+21      Right Index Bottom   40 05
+22      Right Index Top      80 05
+23      Right Pinky Bottom   C0 05
+24      Right Pinky Top      00 06
+25      Right Thumb          40 06
+26      Right Wrist          80 06
+27      ???                  C0 06
+28      Right Shoulder       00 07
+29      Neck                 40 07
+30      Head                 80 07
+31      Face                 C0 07
+32      ???                  00 08
+33      Forehead             40 08
+34      Hair Extra           80 08
+35      Back Extra           C0 08
+36      Boob                 00 09
+37      ???                  40 09
+38      ???                  80 09
+39      ???                  C0 09
+40      Left Thigh           00 0A
+41      Left Calf            40 0A
+42      ???                  80 0A
+43      Left Foot            C0 0A
+44      Left Toe             00 0B
+45      Right Thigh          40 0B
+46      Right Calf           80 0B
+47      Right Foot           C0 0B
+48      Right Toe            00 0C

@@ -2,8 +2,7 @@ This isn't specific to PSP, but the THAW engine tony hawk games, but I haven't s
 
 Header/Gap Ammount
 
-The gap files use pretty common byte to value things for everything, the first 8 bytes seem to be specific to each level, but not changing them
-when making new files has seemed to have no impact on them function fine for the new level, and gap tracking and all that so you can ignore them.
+The gap files use pretty common byte to value things for everything, the first 8 bytes seem to be the qbkey of the level name, so like P8 Suburbs is F8 60 C5 56 (Z_Houses).
 After those 8 bytes, there is a two bytes which are the number of gaps in the gap file, so if there is like 30 gaps in the map then the byte should
 be 1E 00. 
 

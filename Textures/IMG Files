@@ -1,0 +1,26 @@
+A lot of the games textures like deck graphics, shirt/hat logos, loadscreens, and much more are .IMG files.
+
+Now there are two main type of .IMG files I have found, ones with a color palette and ones without.
+
+The ones without a color palette are very straight forward, you have 32 bytes for your header data, and then each 4 bytes is a pixel, each byte in those 4 being
+a R, G, B, and A value for that pixel.
+
+The ones with a color palette are a bit more complex but still not too hard to wrap your head around.
+
+Basically after the 32 bytes for header data there will be a handful of bytes which is the color palette, you usually can either get them in the size of 16 colors (64 bytes)
+or bigger than 16 colors.
+
+If the palette is only 16 colors, then what it means is the bytes after the color palette data, which ill refer to as pixel data, is two pixels per byte, since 16 is the
+max value you can go up to with a single hex value (F) these .IMG files can use half a byte for a pixel, and each byte will refer to two colors from the palette to draw two
+pixels.
+
+Like for example 1F would be the 2, and 16 colors from the color palette, and would draw one pixel for the first half of the bytes color, and draw a second pixel with the second
+halfs color.
+
+Now if your color palette has more than 16 colors, it is in a similar vein to the 16 color palette ones, the only difference, is the pixel data bytes are a full byte per pixel
+so that way it can call values bigger than 16, so like the 21 color in the color palette would be byte (15) and then a pixel would be drawn with that color.
+
+Some images may have other things applied to them alongside these methods, like some of the THUG 2 Remix deck graphics and cas logos are using a method called swizling, which I
+haven't fully wrapped my head around yet, but it seems to mix up the pixels so its not just drawing the image in order, and aside from swizling, level/model textures seem to have no 
+refrence to a resolution and also use Mip Maps, so each texture has the main textue, along with smaller versions of the original texture for swaping when your further away from them
+in game.

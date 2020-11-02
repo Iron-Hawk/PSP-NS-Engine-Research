@@ -10,6 +10,9 @@ The ones with a color palette are a bit more complex but still not too hard to w
 Basically after the 32 bytes for header data there will be a handful of bytes which is the color palette, you usually can either get them in the size of 16 colors (64 bytes)
 or bigger than 16 colors.
 
+The color palette is basically just structed in a list of RGBA values, it will have 4 bytes for a RGBA value and then list the next 4 bytes for the next value after it untill
+it has all the colors it needs in the palette.
+
 If the palette is only 16 colors, then what it means is the bytes after the color palette data, which ill refer to as pixel data, is two pixels per byte, since 16 is the
 max value you can go up to with a single hex value (F) these .IMG files can use half a byte for a pixel, and each byte will refer to two colors from the palette to draw two
 pixels.

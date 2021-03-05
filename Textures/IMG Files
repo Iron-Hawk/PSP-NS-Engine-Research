@@ -31,9 +31,9 @@ Color Pal Data (If IMG has it)
                                 [Image is drawn in the order that the pixel data is read]
                                 
    If Color Pal Is 256 & Image Is Swizzled
-   Width Val * Height Val Bytes [Each Byte is 2 pixels, with each half of the byte representing a value from 0 - 15 (0 - f) which will set that pixel as that color in the color pal list]
-                                    [Image is drawn in chunks, each big chunk is 1024 bytes, with the small chunks inside of the big chunks being 128 bytes, there should be 8 small chunks to a big chunk]
-                                    [Small chunks are made up of 8 lines of 16 bytes, each line being drawn under the one before it, so line 1 of small chunk 1 draws 16 bytes at w/h 0, and line 2 of small chunk 1 draws 16 bytes at w 0 h 1, and so on until the small chunk is done, then the next small chunk continues from the last chunk, so line 1 of small chunk 2 draws 16 bytes at w 16 h 0, and line 2 of small chunk 2 draws 16 bytes at w 16 h 1, and so on until all small chunks of the big chunk have been drawn, and it moves onto the next big chunk]
+   Width Val * Height Val Bytes [Each Byte is 1 pixel, with each byte representing a value from 0 - 255 (00 - ff) which will set that pixel as that color in the color pal list]
+                                [Image is drawn in chunks, each big chunk is 1024 bytes, with the small chunks inside of the big chunks being 128 bytes, there should be 8 small chunks to a big chunk]
+                                [Small chunks are made up of 8 lines of 16 bytes, each line being drawn under the one before it, so line 1 of small chunk 1 draws 16 bytes at w/h 0, and line 2 of small chunk 1 draws 16 bytes at w 0 h 1, and so on until the small chunk is done, then the next small chunk continues from the last chunk, so line 1 of small chunk 2 draws 16 bytes at w 16 h 0, and line 2 of small chunk 2 draws 16 bytes at w 16 h 1, and so on until all small chunks of the big chunk have been drawn, and it moves onto the next big chunk]
                                     
    If No Color Pal
    Width Val * Height Val * 4 Bytes [Each 4 Bytes is a pixel, with 1 Byte for Red, 1 Byte Blue, 1 Byte Green, 1 Byte Alpha]

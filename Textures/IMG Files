@@ -1,29 +1,40 @@
-A lot of the games textures like deck graphics, shirt/hat logos, loadscreens, and much more are .IMG files.
+.IMG Files
 
-Now there are two main type of .IMG files I have found, ones with a color palette and ones without.
+Header Data
+  8 Bytes IMG Version Possibly? [THUG2 Remix/MTX Mototrax = 02 00 00 00 7C FC 12 00 THP8 = 04 00 00 00 73 65 53 56]
+  18 Bytes ???
+  2 Bytes Is Image Swizzled [10 00 = Swizzled 00 00 = Not Swizzled]
+  4 Bytes IMG Resolution [2 Bytes Width, 2 Bytes Height]
 
-The ones without a color palette are very straight forward, you have 32 bytes for your header data, and then each 4 bytes is a pixel, each byte in those 4 being
-a R, G, B, and A value for that pixel.
-
-The ones with a color palette are a bit more complex but still not too hard to wrap your head around.
-
-Basically after the 32 bytes for header data there will be a handful of bytes which is the color palette, you usually can either get them in the size of 16 colors (64 bytes)
-or bigger than 16 colors.
-
-The color palette is basically just structed in a list of RGBA values, it will have 4 bytes for a RGBA value and then list the next 4 bytes for the next value after it untill
-it has all the colors it needs in the palette.
-
-If the palette is only 16 colors, then what it means is the bytes after the color palette data, which ill refer to as pixel data, is two pixels per byte, since 16 is the
-max value you can go up to with a single hex value (F) these .IMG files can use half a byte for a pixel, and each byte will refer to two colors from the palette to draw two
-pixels.
-
-Like for example 1F would be the 2, and 16 colors from the color palette, and would draw one pixel for the first half of the bytes color, and draw a second pixel with the second
-halfs color.
-
-Now if your color palette has more than 16 colors, it is in a similar vein to the 16 color palette ones, the only difference, is the pixel data bytes are a full byte per pixel
-so that way it can call values bigger than 16, so like the 21 color in the color palette would be byte (15) and then a pixel would be drawn with that color.
-
-Some images may have other things applied to them alongside these methods, like some of the THUG 2 Remix deck graphics and cas logos are using a method called swizling, which I
-haven't fully wrapped my head around yet, but it seems to mix up the pixels so its not just drawing the image in order, and aside from swizling, level/model textures seem to have no 
-refrence to a resolution and also use Mip Maps, so each texture has the main textue, along with smaller versions of the original texture for swaping when your further away from them
-in game.
+Color Pal Data (If IMG has it)
+  If 16 Colors
+  64 Bytes [4 Bytes for each color, 1 Byte Red, 1 Byte Blue, 1 Byte Green, 1 Byte Alpha]
+  
+  If 256 Colors Ver 1
+  1024 Bytes [4 Bytes for each color, 1 Byte Red, 1 Byte Blue, 1 Byte Green, 1 Byte Alpha]
+  
+  If 256 Colors Ver 2
+  512 Bytes [2 bytes for each color, i'm not sure yet how they work, will update this when I figure it out]
+ 
+ Pixel Data
+   If Color Pal Is 16 & Image Is Not Swizzled
+   Width Val * Height Val / 2 Bytes [Each Byte is 2 pixels, with each half of the byte representing a value from 0 - 15 (0 - f) which will set that pixel as that color in the color pal list]
+                                    [Image is drawn in the order that the pixel data is read]
+                                    
+   If Color Pal Is 16 & Image Is Swizzled
+   Width Val * Height Val / 2 Bytes [Each Byte is 2 pixels, with each half of the byte representing a value from 0 - 15 (0 - f) which will set that pixel as that color in the color pal list]
+                                    [Image is drawn in chunks, each big chunk is 512 bytes, with the small chunks inside of the big chunks being 64 bytes, there should be 8 small chunks to a big chunk]
+                                    [Small chunks are made up of 8 lines of 8 bytes, each line being drawn under the one before it, so line 1 of small chunk 1 draws 16 bytes at w/h 0, and line 2 of small chunk 1 draws 16 bytes at w 0 h 1, and so on until the small chunk is done, then the next small chunk continues from the last chunk, so line 1 of small chunk 2 draws 16 bytes at w 16 h 0, and line 2 of small chunk 2 draws 16 bytes at w 16 h 1, and so on until all small chunks of the big chunk have been drawn, and it moves onto the next big chunk]
+                                    
+   If Color Pal Is 256 & Image Is Not Swizzled
+   Width Val * Height Val Bytes [Each Byte is 1 pixel, with each byte representing a value from 0 - 255 (00 - ff) which will set that pixel as that color in the color pal list]
+                                [Image is drawn in the order that the pixel data is read]
+                                
+   If Color Pal Is 16 & Image Is Swizzled
+   Width Val * Height Val / 2 Bytes [Each Byte is 2 pixels, with each half of the byte representing a value from 0 - 15 (0 - f) which will set that pixel as that color in the color pal list]
+                                    [Image is drawn in chunks, each big chunk is 1024 bytes, with the small chunks inside of the big chunks being 128 bytes, there should be 8 small chunks to a big chunk]
+                                    [Small chunks are made up of 8 lines of 16 bytes, each line being drawn under the one before it, so line 1 of small chunk 1 draws 16 bytes at w/h 0, and line 2 of small chunk 1 draws 16 bytes at w 0 h 1, and so on until the small chunk is done, then the next small chunk continues from the last chunk, so line 1 of small chunk 2 draws 16 bytes at w 16 h 0, and line 2 of small chunk 2 draws 16 bytes at w 16 h 1, and so on until all small chunks of the big chunk have been drawn, and it moves onto the next big chunk]
+                                    
+   If No Color Pal
+   Width Val * Height Val * 4 Bytes [Each 4 Bytes is a pixel, with 1 Byte for Red, 1 Byte Blue, 1 Byte Green, 1 Byte Alpha]
+   

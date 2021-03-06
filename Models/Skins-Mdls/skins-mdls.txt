@@ -1,0 +1,31 @@
+Skin/MDL Files
+
+Header Data
+    12 Bytes model format mark? (These bytes [BE BA ED C0 00 00 00 00 60 00 00 00] seem to always be the same on every model, so I think it might be to mark them as a skin/mdl model)
+    4 Bytes checksum name
+    4 Bytes padding
+    2 Bytes textures data start offset
+    2 Bytes padding
+    2 Bytes textures data chunk length
+    6 Bytes padding
+    2 Bytes vertices data start offset
+    2 Bytes padding
+    2 Bytes vertices data chunk length
+    6 Bytes padding
+    2 Bytes face data start offset
+    2 Bytes padding
+    2 Bytes face data chunk length
+    6 Bytes padding
+    2 Bytes ???
+    6 Bytes padding
+    X Bytes model file name as string (Not sure why this is part of the models, seems to do nothing, maybe was for something dev side, does make searching the models in un-compressed containers easier though :P)
+    
+    Note: It is possible some of the padding could be for larger offset/length values, but I have yet to run into any models that use them so I am not 100% sure
+    
+Materials Data
+
+Textures Data
+
+Face Data
+
+Vertices Data

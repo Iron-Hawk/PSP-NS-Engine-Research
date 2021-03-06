@@ -1,3 +1,0 @@
-The texture names on skins and mdls are stored like qbkeys, and are right before 00 00 00 00 80 80 80 00
-so you can use roq or something to get the qbkey for the texture (for if you can't import the model into blender to check)
-or if you need to change it to something you know for texture swaping (as texture swaps use strings instead of qbkeys).

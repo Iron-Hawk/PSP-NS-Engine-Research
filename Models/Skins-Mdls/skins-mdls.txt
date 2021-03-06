@@ -28,4 +28,24 @@ Textures Data
 
 Face Data
 
+    Vertex Groups
+
+    The bytes for a groups number are stored in two bytes, following a pattern of
+    00 00
+    00 04
+    00 08
+    00 0C
+    and then the first byte goes up by one after that loop, so it would be 
+    0 = 00 00
+    1 = 00 04
+    2 = 00 08
+    3 = 00 0C
+    4 = 01 00
+    5 = 01 04
+    6 = 01 08
+    7 = 01 0C
+    and so on
+    
+    They usually come after either byte 2A or 0A, and are usually in little clusters, with 2A being the start and 9B being the end
+
 Vertices Data

@@ -26,6 +26,11 @@ Materials Data
 
 Textures Data
 
+64/128/256 bytes for texture color pal (64 bytes for 16 colors, 128 for 64 colors (weird fucky 2 byte rgba format), 256 for 64 colors)
+x bytes for textures, usually goes smallest mip map up to the biggest texture size
+
+^ loops till end of the textures chunk
+
 Face Data
 
     Vertex Groups
@@ -49,3 +54,12 @@ Face Data
     They usually come after either byte 2A or 0A, and are usually in little clusters, with 2A being the start and 9B being the end
 
 Vertices Data
+
+5 bytes (FF 00 00 00 0B) start of vertices mark?
+4 bytes ???
+6 bytes ???
+2 bytes x pos
+2 bytes y pos
+2 bytes z pos
+
+^ loops till end of the vertices chunk

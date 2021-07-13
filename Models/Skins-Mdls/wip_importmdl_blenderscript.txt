@@ -1,3 +1,5 @@
+Work In Progress script for importing psp skins/mdl's into blender, right now this script works with any unrigged models, and only imports the vertices right now.
+--------------------------------------------------------------------------
 import struct
 import bpy
 import bmesh
@@ -69,3 +71,4 @@ mymesh.from_pydata(verts,[],faces)
 mymesh.update(calc_edges=True)
 
 file.close()
+--------------------------------------------------------------------------

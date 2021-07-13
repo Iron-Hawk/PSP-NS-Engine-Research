@@ -1,0 +1,71 @@
+import struct
+import bpy
+import bmesh
+
+file = open("/Users/YourUserName/Desktop/veh_vwbug_sz.mdl.psp","rb")
+
+file.seek(32)
+bytes_vert_offset = file.read(2)
+bytes_throwaway = file.read(2)
+bytes_vert_length = file.read(2)
+file.seek(44)
+bytes_face_offset = file.read(2)
+bytes_throwaway = file.read(2)
+bytes_face_length = file.read(2)
+print(bytes_face_offset)
+print(bytes_face_length)
+face_offset_int = int.from_bytes(bytes_face_offset, "little")      
+face_length_int = int.from_bytes(bytes_face_length, "little")      
+print(face_offset_int)
+print(face_length_int)
+vert_offset_int = int.from_bytes(bytes_vert_offset, "little")      
+vert_length_int = int.from_bytes(bytes_vert_length, "little")      
+print(vert_offset_int)
+print(vert_length_int)
+vert_length_int_forloop = vert_length_int / 16.0
+
+file.seek(vert_offset_int)
+
+verts_l = list(range(0))
+print(verts_l)
+
+i = 0
+while(i < vert_length_int_forloop):
+  bytes_throwaway = file.read(10)
+  bytes_x = file.read(2)
+  bytes_y = file.read(2)
+  bytes_z = file.read(2)
+  x_unpack = struct.unpack('h', bytes_x)
+  x_pos = float('.'.join(str(ele) for ele in x_unpack)) 
+  #x_pos = x_pos / 255.0
+  print(bytes_x)
+  print(x_pos)
+  y_unpack = struct.unpack('h', bytes_y)
+  y_pos = float('.'.join(str(ele) for ele in y_unpack)) 
+  #y_pos = y_pos / 255.0
+  print(bytes_y)
+  print(y_pos)
+  z_unpack = struct.unpack('h', bytes_z)
+  z_pos = float('.'.join(str(ele) for ele in z_unpack)) 
+  #z_pos = z_pos / 255.0
+  print(bytes_z)
+  print(z_pos)
+  verts_index = (x_pos, y_pos, z_pos)
+  verts_l.insert(0, verts_index)
+  print(verts_l)
+  i += 1
+
+
+verts = verts_l
+faces = []
+
+mymesh = bpy.data.meshes.new("PSP_Test")
+myobject = bpy.data.objects.new("PSP_Test", mymesh)
+
+myobject.location = (0, 0, 0)
+bpy.context.scene.objects.link(myobject)
+
+mymesh.from_pydata(verts,[],faces)
+mymesh.update(calc_edges=True)
+
+file.close()

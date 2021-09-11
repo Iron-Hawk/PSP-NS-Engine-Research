@@ -16,23 +16,23 @@ Color Pal Data (If IMG has it)
   If 256 Colors Ver 2
   512 Bytes [2 bytes for each color, 1 half Byte part Red and Green, 1 half Byte part Red, 1 half Byte Alpha, part Blue, 1 half Byte part Blue, part Green] (See chart below for more insight)
   
-Byte 1 First Half	          Byte 1 Second Half	  Byte 2 First Half	          Byte 2 Second Half
-Byte 0 = [R = 0 G = 0]	    Byte 0 = [R = 0]	    Byte 0 = [A = 0 B = 0]	    Byte 0 = [B = 0 G = 0]
-Byte 1 = [R = 133 G = 0]	  Byte 1 = [R = 8]	    Byte 1 = [A = 0 B = 33]	    Byte 1 = [B = 0 G = 66]
-Byte 2 = [R = 0 G = 8]	    Byte 2 = [R = 16]	    Byte 2 = [A = 0 B = 66]   	Byte 2 = [B = 0 G = 133]
-Byte 3 = [R = 133 G = 8]	  Byte 3 = [R = 24]    	Byte 3 = [A = 0 B = 100]	  Byte 3 = [B = 0 G = 200]
-Byte 4 = [R = 0 G = 16]	    Byte 4 = [R = 33]	    Byte 4 = [A = 0 B = 133]	  Byte 4 = [B = 8 G = 0]
-Byte 5 = [R = 133 G = 16]	  Byte 5 = [R = 41]	    Byte 5 = [A = 0 B = 166]	  Byte 5 = [B = 8 G = 66]
-Byte 6 = [R = 0 G = 24]	    Byte 6 = [R = 49]	    Byte 6 = [A = 0 B = 200]	  Byte 6 = [B = 8 G = 133]
-Byte 7 = [R = 133 G = 24]	  Byte 7 = [R = 57]	    Byte 7 = [A = 0 B = 233]	  Byte 7 = [B = 8 G = 200]
-Byte 8 = [R = 0 G = 33]	    Byte 8 = [R = 66]	    Byte 8 = [A = 255 B = 0]	  Byte 8 = [B = 16 G = 0]
-Byte 9 = [R = 133 G = 33]	  Byte 9 = [R = 75]	    Byte 9 = [A = 255 B = 33]	  Byte 9 = [B = 16 G = 66]
-Byte A = [R = 0 G = 41]     Byte A = [R = 83]	    Byte A = [A = 255 B = 66]	  Byte A = [B = 16 G = 133]
-Byte B = [R = 133 G = 41]	  Byte B = [R = 91]	    Byte B = [A = 255 B = 100]	Byte B = [B = 16 G = 200]
+Byte 1 First Half	    Byte 1 Second Half	  Byte 2 First Half	        Byte 2 Second Half
+Byte 0 = [R = 0 G = 0]	    Byte 0 = [R = 0]	  Byte 0 = [A = 0 B = 0]        Byte 0 = [B = 0 G = 0]
+Byte 1 = [R = 133 G = 0]    Byte 1 = [R = 8]	  Byte 1 = [A = 0 B = 33]	Byte 1 = [B = 0 G = 66]
+Byte 2 = [R = 0 G = 8]	    Byte 2 = [R = 16]	  Byte 2 = [A = 0 B = 66]   	Byte 2 = [B = 0 G = 133]
+Byte 3 = [R = 133 G = 8]    Byte 3 = [R = 24]     Byte 3 = [A = 0 B = 100]      Byte 3 = [B = 0 G = 200]
+Byte 4 = [R = 0 G = 16]	    Byte 4 = [R = 33]	  Byte 4 = [A = 0 B = 133]	Byte 4 = [B = 8 G = 0]
+Byte 5 = [R = 133 G = 16]   Byte 5 = [R = 41]	  Byte 5 = [A = 0 B = 166]	Byte 5 = [B = 8 G = 66]
+Byte 6 = [R = 0 G = 24]	    Byte 6 = [R = 49]	  Byte 6 = [A = 0 B = 200]      Byte 6 = [B = 8 G = 133]
+Byte 7 = [R = 133 G = 24]   Byte 7 = [R = 57]	  Byte 7 = [A = 0 B = 233]      Byte 7 = [B = 8 G = 200]
+Byte 8 = [R = 0 G = 33]	    Byte 8 = [R = 66]	  Byte 8 = [A = 255 B = 0]	Byte 8 = [B = 16 G = 0]
+Byte 9 = [R = 133 G = 33]   Byte 9 = [R = 75]	  Byte 9 = [A = 255 B = 33]	Byte 9 = [B = 16 G = 66]
+Byte A = [R = 0 G = 41]     Byte A = [R = 83]	  Byte A = [A = 255 B = 66]	Byte A = [B = 16 G = 133]
+Byte B = [R = 133 G = 41]   Byte B = [R = 91]	  Byte B = [A = 255 B = 100]	Byte B = [B = 16 G = 200]
 Byte C = [R = 0 G = 49]	    Byte C = [R = 100]	  Byte C = [A = 255 B = 133]	Byte C = [B = 24 G = 0]
-Byte D = [R = 133 G = 49]	  Byte D = [R = 108]	  Byte D = [A = 255 B = 166]	Byte D = [B = 24 G = 66]
+Byte D = [R = 133 G = 49]   Byte D = [R = 108]	  Byte D = [A = 255 B = 166]	Byte D = [B = 24 G = 66]
 Byte E = [R = 0 G = 57]	    Byte E = [R = 116]	  Byte E = [A = 255 B = 200]	Byte E = [B = 24 G = 133]
-Byte F = [R = 133 G = 57]	  Byte F = [R = 124]	  Byte F = [A = 255 B = 233]	Byte F = [B = 24 G = 200]
+Byte F = [R = 133 G = 57]   Byte F = [R = 124]	  Byte F = [A = 255 B = 233]	Byte F = [B = 24 G = 200]
  
  Pixel Data
    If Color Pal Is 16 & Image Is Not Swizzled

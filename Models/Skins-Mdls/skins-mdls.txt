@@ -56,10 +56,14 @@ Face Data
 Vertices Data
 
 5 bytes (FF 00 00 00 0B) start of vertices mark?
+2 bytes x uv pos
+2 bytes y uv pos
+2 bytes vertex colors
 4 bytes ???
-6 bytes ???
 2 bytes x pos
 2 bytes y pos
 2 bytes z pos
 
 ^ loops till end of the vertices chunk
+
+Note: this chunk might be bigger depending on if the vertices has any extra data, a lot of bigger skin models for example have varrying sized vertices chunks due to what I presume is weight data and I have yet to understand how its all handeled

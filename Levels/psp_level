@@ -1,0 +1,35 @@
+PSP_Level Files
+
+Header Data
+    4 bytes model format mark?
+    4 bytes ???
+    4 bytes material/textures chunk length
+    4 bytes ??? chunk length
+    4 bytes vertices/face chunk length
+    4 bytes ???
+    4 bytes ???
+    4 bytes ???
+    
+Materials Data
+
+Textures Data
+
+64/128/256 bytes for texture color pal (64 bytes for 16 colors, 128 for 64 colors (weird fucky 2 byte rgba format), 256 for 64 colors)
+x bytes for textures, usually goes smallest mip map up to the biggest texture size
+
+^ loops till end of the textures chunk
+
+??? Data
+
+Vertices Data
+
+2 bytes x uv pos
+2 bytes y uv pos
+2 bytes vertex color
+2 bytes x pos
+2 bytes y pos
+2 bytes z pos
+
+^ loops till end of the vertices chunk
+
+Face Chunk

@@ -32,4 +32,4 @@ Vertices Data
 
 ^ loops till end of the vertices chunk
 
-Face Chunk
+Face Data

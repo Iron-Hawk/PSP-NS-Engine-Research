@@ -4,30 +4,22 @@ Header Data
     12 Bytes model format mark? (These bytes [BE BA ED C0 00 00 00 00 60 00 00 00] seem to always be the same on every model, so I think it might be to mark them as a skin/mdl model)
     4 Bytes checksum name
     4 Bytes padding
-    2 Bytes textures data start offset
-    2 Bytes padding
-    2 Bytes textures data chunk length
-    6 Bytes padding
-    2 Bytes vertices data start offset
-    2 Bytes padding
-    2 Bytes vertices data chunk length
-    6 Bytes padding
-    2 Bytes face data start offset
-    2 Bytes padding
-    2 Bytes face data chunk length
-    6 Bytes padding
-    2 Bytes ???
-    6 Bytes padding
+    4 Bytes textures data start offset
+    4 Bytes textures data chunk length
+    4 Bytes padding
+    4 Bytes vertices data start offset
+    4 Bytes vertices data chunk length
+    4 Bytes padding
+    4 Bytes face data start offset
+    4 Bytes face data chunk length
+    4 Bytes padding
+    4 Bytes ???
+    4 Bytes padding
     X Bytes model file name as string (Not sure why this is part of the models, seems to do nothing, maybe was for something dev side, does make searching the models in un-compressed containers easier though :P)
     
     Note: It is possible some of the padding could be for larger offset/length values, but I have yet to run into any models that use them so I am not 100% sure
     
-Materials Data
-
 Textures Data
-
-64/128/256 bytes for texture color pal (64 bytes for 16 colors, 128 for 64 colors (weird fucky 2 byte rgba format), 256 for 64 colors)
-x bytes for textures, usually goes smallest mip map up to the biggest texture size
 
 ^ loops till end of the textures chunk
 
@@ -67,3 +59,69 @@ Vertices Data
 ^ loops till end of the vertices chunk
 
 Note: this chunk might be bigger depending on if the vertices has any extra data, a lot of bigger skin models for example have varrying sized vertices chunks due to what I presume is weight data and I have yet to understand how its all handeled
+
+------------------------------------------------------------------------
+WIP Blender import script
+
+import struct
+import bpy
+import bmesh
+
+file = open("pathtofilehere","rb")
+
+#Read Header Data
+bytes_filetype_mark = file.read(12)
+bytes_checksumname = file.read(4)
+bytes_padding = file.read(4)
+bytes_tex_offset = file.read(4)
+bytes_tex_length = file.read(4)
+bytes_padding = file.read(4)
+bytes_vert_offset = file.read(4)
+bytes_vert_length = file.read(4)
+bytes_padding = file.read(4)
+bytes_face_offset = file.read(4)
+bytes_face_length = file.read(4)
+bytes_padding = file.read(4)
+bytes_unknown = file.read(4)
+
+#Convert header data into useable length and offset values  
+face_offset_int = int.from_bytes(bytes_face_offset, "little")      
+face_length_int = int.from_bytes(bytes_face_length, "little")      
+vert_offset_int = int.from_bytes(bytes_vert_offset, "little")      
+vert_length_int = int.from_bytes(bytes_vert_length, "little")      
+
+#Create lists
+verts_l = list(range(0))
+
+#Force the fileseek to vertices offset since texture data chunk handeling isn't figured out yet
+file.seek(vert_offset_int)
+
+i = 0
+while(i < vert_length_int / 16.0):#Sometimes the values for these chunks can change, i'm pretty sure because of weight data, most mdl's should follow this format, though there were some in mtx that seemed to have weights on them, I have not figured out how the game detects the mini-chunk size, but hopefully I can figure it out soon
+  bytes_uvx = file.read(2)
+  bytes_uvy = file.read(2)
+  bytes_vertcol = file.read(2)
+  bytes_unknown = file.read(4)
+  bytes_vertpos = file.read(6)
+  vertpos_unpack = struct.unpack('3h', bytes_vertpos)
+  verts_index = (vertpos_unpack)
+  verts_l.insert(0, verts_index)
+  i += 1
+
+verts = verts_l
+faces = []
+
+#Create new object within blender
+mymesh = bpy.data.meshes.new("PSP_Test")
+myobject = bpy.data.objects.new("PSP_Test", mymesh)
+
+myobject.location = (0, 0, 0)
+bpy.context.scene.objects.link(myobject)
+
+mymesh.from_pydata(verts,[],faces)
+mymesh.update(calc_edges=True)
+
+#print("Vertices Values")
+#print(verts_l)
+
+file.close()

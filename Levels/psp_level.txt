@@ -1,35 +1,137 @@
-PSP_Level Files
+Header
 
-Header Data
-    4 bytes model format mark?
-    4 bytes ???
-    4 bytes material/textures chunk length
-    4 bytes ??? chunk length
-    4 bytes vertices/face chunk length
-    4 bytes ???
-    4 bytes ???
-    4 bytes ???
-    
-Materials Data
+4 bytes model format mark?
+4 bytes lvl objects data chunk length
+4 bytes textures chunk length
+4 bytes boxes count (each box length is 16 bytes) [Seems to be for optimization, determines what angle the camera needs to be in for the item to be visble]
+4 bytes vertices chunk length
+4 bytes unknown length or count
+4 bytes unknown length or count
+4 bytes num of level objects
+4 bytes texcmds(?) chunk length (? - refered to as prims in the boot bin, not sure what this means yet)
+4 bytes prims(?) chunk length (? - refered to as prims in the boot bin, not sure what this means yet)
+4 bytes unknown length or count
+6 bytes level offset pos
 
-Textures Data
+Level Object Data Chunk
 
-64/128/256 bytes for texture color pal (64 bytes for 16 colors, 128 for 64 colors (weird fucky 2 byte rgba format), 256 for 64 colors)
-x bytes for textures, usually goes smallest mip map up to the biggest texture size
+64 bytes per level object
 
-^ loops till end of the textures chunk
+Textures Chunk
 
-??? Data
+BBoxes Chunk
 
-Vertices Data
+16 bytes per bbox 8 per vector4
+
+Vertices Chunk
 
 2 bytes x uv pos
 2 bytes y uv pos
-2 bytes vertex color
+2 or 6 bytes vertex color
 2 bytes x pos
 2 bytes y pos
 2 bytes z pos
 
 ^ loops till end of the vertices chunk
 
-Face Data
+----------------------------------------------------------------
+WIP Blender Import Script
+
+import struct
+import bpy
+import bmesh
+
+file = open("pathtofilehere","rb")
+
+#Read Header Data
+header_size = 64
+bytes_filetype_mark = file.read(4)
+bytes_lvlobj_count = file.read(4)#Count for lvl objs, each mini-chunk in the main chunk is 64 bytes, and there is one mini-chunk for every lvl obj in the level
+bytes_tex_length = file.read(4)#Length for the textures chunk
+bytes_bboxes_count = file.read(4)#Length for the bboxes chunk
+bytes_vert_length = file.read(4)#Length for the vertices chunk
+bytes_lvlobj_length = file.read(4)#Length for lvl objs chunk
+bytes_unknown1_length = file.read(4)#Length or Count for unknown data chunk
+bytes_unknown2_length = file.read(4)#Length or Count for unknown data chunk
+bytes_texcmds_length = file.read(4)#Length for something refered to in the boot bin as texcmds, not sure what this is yet
+bytes_prims_length = file.read(4)#Length for something refered to in the boot bin as prims, not sure what this is yet
+bytes_unknown3_length = file.read(4)#Length or Count for unknown data chunk
+bytes_lvloffset_length = file.read(6)#3 shorts for level offset
+  
+#Convert header data into useable length values  
+lvlobj_count_int = int.from_bytes(bytes_lvlobj_count, "little")  
+tex_length_int = int.from_bytes(bytes_tex_length, "little")      
+bboxes_count_int = int.from_bytes(bytes_bboxes_count, "little") 
+vert_length_int = int.from_bytes(bytes_vert_length, "little")   
+unknown1_length_int = int.from_bytes(bytes_unknown1_length , "little") 
+unknown2_length_int = int.from_bytes(bytes_unknown2_length , "little")   
+lvlobj_length_int = int.from_bytes(bytes_lvlobj_length, "little")  
+texcmds_length_int = int.from_bytes(bytes_texcmds_length, "little")  
+prims_length_int = int.from_bytes(bytes_prims_length, "little")  
+unknown3_length_int = int.from_bytes(bytes_unknown3_length , "little") 
+lvl_offset = struct.unpack('3h', bytes_lvloffset_length)
+
+#Calculate offset values based off chunk lengths
+lvlobj_count_offset = header_size 
+tex_offset = header_size + lvlobj_count_int * 64
+bboxes_offset = tex_offset + tex_length_int
+vert_offset = bboxes_offset + bboxes_count_int
+lvlobj_offset = vert_offset + vert_length_int
+unknown1_offset = lvlobj_offset + lvlobj_length_int
+unknown2_offset = unknown1_offset + unknown1_length_int
+texcmds_offset = unknown1_offset + unknown1_length_int
+prims_offset = texcmds_offset + texcmds_length_int
+unknown3_offset = prims_offset + prims_length_int
+
+#Create lists
+bboxes_l = list(range(0))
+verts_l = list(range(0))
+faces_l = list(range(0))
+
+#Force the fileseek to bbox offset since texture data chunk handeling isn't figured out yet
+file.seek(bboxes_offset)
+
+#Read BBoxes data
+i = 0
+while(i < bboxes_count_int):
+  bytes_bbox = file.read(8)
+  bbox_unpack = struct.unpack('4h', bytes_bbox)
+  bytes_bbox_ = file.read(8)
+  bbox__unpack = struct.unpack('4h', bytes_bbox_)
+  bboxes_index = (bbox_unpack, bbox__unpack)
+  bboxes_l.insert(0, bboxes_index)
+  i += 1
+
+#Read Vertices data
+i = 0
+while(i < vert_length_int / 12.0):
+  bytes_uvx = file.read(2)
+  bytes_uvy = file.read(2)
+  bytes_vertcol = file.read(2)#Some vertices have 6 byte vertex colors, this is why most levels don't fully import proper aside from school 1 and the test levels, I don't know how the game detects these yet but hopefully I can figure it out soon
+  bytes_vertpos = file.read(6)
+  vertpos_unpack = struct.unpack('3h', bytes_vertpos)
+  verts_index = (vertpos_unpack)
+  verts_l.insert(0, verts_index)
+  i += 1
+
+verts = verts_l
+faces = []
+
+#Create new object within blender
+mymesh = bpy.data.meshes.new("PSP_Level_Test")
+myobject = bpy.data.objects.new("PSP_Level_Test", mymesh)
+
+#Move object to offset value from header
+myobject.location = (lvl_offset)
+bpy.context.scene.objects.link(myobject)
+
+mymesh.from_pydata(verts,[],faces)
+mymesh.update(calc_edges=True)
+
+#print("BBoxes Values")
+#print(bboxes_l)
+
+#print("Vertices Values")
+#print(verts_l)
+
+file.close()

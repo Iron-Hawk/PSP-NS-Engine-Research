@@ -8,7 +8,7 @@ Header
 4 bytes unknown length or count
 4 bytes unknown length or count
 4 bytes num of level objects
-4 bytes texcmds(?) chunk length (? - refered to as prims in the boot bin, not sure what this means yet)
+4 bytes texcmds(?) chunk length (? - refered to as texcmds in the boot bin, not sure what this means yet)
 4 bytes prims(?) chunk length (? - refered to as prims in the boot bin, not sure what this means yet)
 4 bytes unknown length or count
 6 bytes level offset pos

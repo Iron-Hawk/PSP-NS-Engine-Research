@@ -1,47 +1,8 @@
-Header
-
-4 bytes model format mark?
-4 bytes lvl objects data chunk length
-4 bytes textures chunk length
-4 bytes boxes count (each box length is 16 bytes) [Seems to be for optimization, determines what angle the camera needs to be in for the item to be visble]
-4 bytes vertices chunk length
-4 bytes unknown length or count
-4 bytes unknown length or count
-4 bytes num of level objects
-4 bytes texcmds(?) chunk length (? - refered to as texcmds in the boot bin, not sure what this means yet)
-4 bytes prims(?) chunk length (? - refered to as prims in the boot bin, not sure what this means yet)
-4 bytes unknown length or count
-6 bytes level offset pos
-
-Level Object Data Chunk
-
-64 bytes per level object
-
-Textures Chunk
-
-BBoxes Chunk
-
-16 bytes per bbox 8 per vector4
-
-Vertices Chunk
-
-2 bytes x uv pos
-2 bytes y uv pos
-2 or 6 bytes vertex color
-2 bytes x pos
-2 bytes y pos
-2 bytes z pos
-
-^ loops till end of the vertices chunk
-
-----------------------------------------------------------------
-WIP Blender Import Script
-
 import struct
 import bpy
 import bmesh
 
-file = open("pathtofilehere","rb")
+file = open("/Users/???/Desktop/sc.psp_level","rb")
 
 #Read Header Data
 header_size = 64
@@ -73,9 +34,9 @@ lvl_offset = struct.unpack('3h', bytes_lvloffset_length)
 
 #Calculate offset values based off chunk lengths
 lvlobj_count_offset = header_size 
-tex_offset = header_size + lvlobj_count_int * 64
+tex_offset = header_size + (lvlobj_count_int * 64)
 bboxes_offset = tex_offset + tex_length_int
-vert_offset = bboxes_offset + bboxes_count_int
+vert_offset = bboxes_offset + (bboxes_count_int * 16)
 lvlobj_offset = vert_offset + vert_length_int
 unknown1_offset = lvlobj_offset + lvlobj_length_int
 unknown2_offset = unknown1_offset + unknown1_length_int
@@ -135,3 +96,90 @@ mymesh.update(calc_edges=True)
 #print(verts_l)
 
 file.close()
+
+----------------------------------------------------------------
+NOTE: Only the following levels seem to import complete, School, Marseille, Shaba Test Level, & Page44 Test Level.
+----------------------------------------------------------------
+
+- File Study -
+
+  All byte values are little endian unless otherwise stated!
+
+  Header [64 Bytes Total]
+
+    Num. Of   | Quick Desc.               | Misc. Details
+     Bytes    |
+
+    4 Bytes   | File format mark          | [0B000000]
+    4 Bytes   | Level objects chunk count | Each chunk is 64 bytes long. Count * 64 gets the chunk length.
+    4 Bytes   | Texture chunk length      |
+    4 Bytes   | BBoxes count              | Each Bboxes length is 16 bytes. Count * 16 gets the chunk length.
+    4 Bytes   | Vertices chunk length     |
+    4 Bytes   | Unknown                   |
+    4 Bytes   | Unknown                   |
+    4 Bytes   | Unknown                   |
+    4 Bytes   | Unknown                   | Refered to as Texcmds in boot bin, possibly texture comands.
+    4 Bytes   | Unknown                   | Refered to as Prims in boot bin.
+    4 Bytes   | Unknown                   |
+    6 Bytes   | Level offset position     | Vector3
+    2 Bytes   | Null                      | [FF]
+    8 Bytes   | Unknown                   |
+
+  Level Object Data Chunk [Total Determined by Header]
+    Num. Of   | Quick Desc.               | Misc. Details
+     Bytes    |
+
+    12 Bytes  | Unknown                   | Seems to always be the same [000000000000484200000000]
+	4 Bytes   | Unknown                   |
+  
+  Textures Data Chunk [Total Determined by Header]
+	
+	
+  
+  BBoxes Data Chunk [Total Determined by Header]
+ 
+    Num. Of   | Quick Desc.               | Misc. Details
+     Bytes    |
+
+    8 Bytes   | Vector4                   |
+    8 Bytes   | Vector4                   |
+
+  Vertices Data Chunk [Total Determined by Header]
+ 
+    Num. Of   | Quick Desc.               | Misc. Details
+     Bytes    |
+
+    2 Bytes   | X UV position             |
+    2 Bytes   | Y UV position             |
+    2/6 Bytes | Vertex color              |
+    2 Bytes   | X position                |
+    2 Bytes   | Y position                |
+    2 Bytes   | Z position                |
+	
+  Materials Data Chunk [Total Determined by Header]
+    The following are random documentation of flags and their related bytes, material chunks change based on data for each material, as a previous set flag will effect following materials
+    Num. Of   | Quick Desc.               | Misc. Details
+     Bytes    |
+	
+	4 Bytes   | Alpha cutoff              | [0000FFDB] First two bytes seem to determine the actual value
+	4 Bytes   | Backface Culling Flag     | [0100001D] = BFC Enabled [0000001D] = BFC Disabled
+	4 Bytes   | Blend mode                | [320000DF] First byte = if fixed, dst, src, etc. Second byte = Additive, subtractive, reverse subtract, etc. Third byte unknown. Fourth byte pass I think.
+	4 Bytes   | CLUT Mode                 | [040000C3] = CLUT4 [050000C3] = CLUT8 [060000C3] = CLUT16
+	4 Bytes   | LOD 0 Pointer             | [000000A0]
+	4 Bytes   | LOD 1 Pointer             | [000000A1]
+	4 Bytes   | LOD 2 Pointer             | [000000A2]
+	4 Bytes   | LOD 3 Pointer             | [000000A3]
+	4 Bytes   | LOD 0 Size                | [050300B8] = 32 x 8
+	4 Bytes   | LOD 1 Size                | [040200B9] = 16 x 4
+	4 Bytes   | LOD 2 Size                | [030100BA] = 8 x 2
+	4 Bytes   | LOD 3 Size                | [020000BB] = 4 x 1
+	4 Bytes   | LOD Slope                 | [182B41D0] = 10.693359
+	4 Bytes   | Tex Filtering             | [070100C6] = min linear mip linear mag linear
+	4 Bytes   | Tex U Scale               | [00004148] = 8
+	4 Bytes   | Tex V Scale               | [00004149] = 8
+	4 Bytes   | Tex U Offset              | [0000C14A] = -8
+	4 Bytes   | Tex V Offset              | [0000C14B] = -8
+	4 Bytes   | Tex Wrap Mode             | [010100C7] = clamp s clamp t [000000C7] = wrap s wrap t 
+	4 Bytes   | Transparency Flag         | [01000021] = Transparency Enabled [00000021] = Transparency Disabled
+	4 Bytes   | Swizzle Flag/LOD Levels   | [010003C2] = Swizzled + 3 LOD Levels [000002C2] = Not Swizzled + 2 LOD Levels
+	4 Bytes   | Z-bias                    | [00004647] First two bytes seem to determine the actual value
